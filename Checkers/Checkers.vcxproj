@@ -130,6 +130,11 @@
     <ClCompile Include="checkers.c" />
     <ClCompile Include="dataStructure.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="Q1.c" />
+    <ClCompile Include="Q2.c" />
+    <ClCompile Include="Q3.c" />
+    <ClCompile Include="Q4.c" />
+    <ClCompile Include="Q5.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="checkers.h" />

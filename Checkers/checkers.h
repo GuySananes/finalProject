@@ -23,20 +23,20 @@
 #define NO_CAPTURES 0
 
 //emun
-enum ROWS_LETTER
-{
-	A, B, C, D,	E, F, G, H
-};
+enum ROWS_LETTER{ A, B, C, D, E, F, G, H };
 
 //macros
 #define IS_GRAY_SQUARE(row, col)   (((row + col)%2 != 0) ? 1 : 0)
 #define WHICH_PLAYER(player) ((player == PLAYER_1) ? 1 : -1)
 #define SET_DIR(d) ((d == RIGHT) ? -1 : 1)
+#define PLAYER_TO_CHAR(P) ((P == 1) ? PLAYER_1 : PLAYER_2)
+#define CHECK_ALLOCATION(p) if(p == NULL) {printf("Memorey allocation failed!\n"); exit(1);}
+#define SWITCH_PLAYERS(player) ((player == PLAYER_1) ? PLAYER_2 : PLAYER_1)
 
 //typdefs
 typedef unsigned char Board[BOARD_SIZE][BOARD_SIZE];
 typedef unsigned char Player;
-typedef unsigned short int USint;
+typedef short int Sint;
 
 //structs
 typedef struct _checkersPos {
@@ -86,12 +86,14 @@ void printBoard(Board board);
 
 //Q1
 SingleSourceMovesTree* FindSingleSourceMoves(Board board, checkersPos* src);
-void FindSingleSourceMovesHelper(Board board, SingleSourceMovesTreeNode* src, USint player);
-void buildssmSubTree(Board board, SingleSourceMovesTreeNode* src, USint nextMove, USint dir);
-USint findMoveType(Board board, checkersPos* pos, USint dir);
+void FindSingleSourceMovesHelper(Board board, SingleSourceMovesTreeNode* src, Sint player);
+void buildssmSubTree(Board board, SingleSourceMovesTreeNode* src, Sint nextMoveType, Sint dir);
+Sint findMoveType(Board board, checkersPos* pos, Sint dir);
+void addNextCaptureNode(Board board, SingleSourceMovesTreeNode* src, Sint player, Sint captures, Sint dir);
 
 //Q2
-
+SingleSourceMovesList* FindSingleSouarceOptimalMove(SingleSourceMovesTree* moves_tree);
+SingleSourceMovesList* FindSingleSouarceOptimalMoveHelper(SingleSourceMovesTreeNode* src);
 
 //Q3
 
@@ -100,15 +102,23 @@ USint findMoveType(Board board, checkersPos* pos, USint dir);
 
 
 //Q5
-
+void PlayGame(Board board, Player starting_player);
+void gamePlayLoop(Board board, Player player);
+bool isGameOver(Board board, Player player);
 
 //Trees function
 SingleSourceMovesTree* makeEmptyTree();
-SingleSourceMovesTreeNode* createSSMTreeNode(Board board, checkersPos* pos, unsigned short totalCaptures, SingleSourceMovesTreeNode* LeftnextMove, SingleSourceMovesTreeNode* RightnextMove);
+SingleSourceMovesTreeNode* createSSMTreeNode(Board board, checkersPos* pos, unsigned short int totalCaptures, SingleSourceMovesTreeNode* LeftnextMove, SingleSourceMovesTreeNode* RightnextMove);
+void freeSSMTree(SingleSourceMovesTree* tree);
+void freeSSMTreeHelper(SingleSourceMovesTreeNode* src);
 
-//etc
+//SingleSourceMoves list fucntions
+SingleSourceMovesList* makeEmptySSMList();
+SingleSourceMovesListCell* createSSMListCell(checkersPos* pos, unsigned short capturs, SingleSourceMovesListCell* next);
+void insertTreeNodeToStartList(SingleSourceMovesTreeNode* TNode, SingleSourceMovesList* list);
+void freeList(SingleSourceMovesList* list);
 
-void checkAllocaiton(void* p);
+//general functions
 void copyBoard(Board dest, Board source);
 
 

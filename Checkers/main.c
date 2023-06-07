@@ -6,7 +6,12 @@ void main() {
 	pos.col = F;
 	pos.row = 2;
 	initGame(board);
+	board[4][1] = 'T';
+	board[1][2] = EMPTY_SQUARE;
+	board[2][3] = EMPTY_SQUARE;
+	board[2][5] = EMPTY_SQUARE;
+	board[4][3] = 'T';
 	printBoard(board);
-	FindSingleSourceMoves(board, &pos);
-	
+	SingleSourceMovesTree* tree = FindSingleSourceMoves(board, &pos);
+	FindSingleSouarceOptimalMove(tree);
 }
