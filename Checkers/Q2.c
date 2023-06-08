@@ -8,9 +8,9 @@
 * Output: optimal moves list
 * Function operation: create the list using helper function
 ************************/
-SingleSourceMovesList* FindSingleSouarceOptimalMove(SingleSourceMovesTree* moves_tree) {
-
-	return FindSingleSouarceOptimalMoveHelper(moves_tree->source);
+SingleSourceMovesList* FindSingleSourceOptimalMove(SingleSourceMovesTree* moves_tree) {
+	//TODO!!!!!!!!!!! add validation for tree pointer
+	return FindSingleSourceOptimalMoveHelper(moves_tree->source);
 
 }
 
@@ -20,7 +20,7 @@ SingleSourceMovesList* FindSingleSouarceOptimalMove(SingleSourceMovesTree* moves
 * Function operation: the function create two optimal lists using a recursive call, choose the optimal list,
 * add the node to the list and free the other one
 ************************/
-SingleSourceMovesList* FindSingleSouarceOptimalMoveHelper(SingleSourceMovesTreeNode* src) {
+SingleSourceMovesList* FindSingleSourceOptimalMoveHelper(SingleSourceMovesTreeNode* src) {
 
 	SingleSourceMovesList* leftList, * rightList;
 	Sint capturesRight = 0, capturesLeft = 0;
@@ -31,8 +31,8 @@ SingleSourceMovesList* FindSingleSouarceOptimalMoveHelper(SingleSourceMovesTreeN
 	}
 
 	//recursive call to create to lists
-	leftList = FindSingleSouarceOptimalMoveHelper(src->nextMoves[LEFT]);
-	rightList = FindSingleSouarceOptimalMoveHelper(src->nextMoves[RIGHT]);
+	leftList = FindSingleSourceOptimalMoveHelper(src->nextMoves[LEFT]);
+	rightList = FindSingleSourceOptimalMoveHelper(src->nextMoves[RIGHT]);
 
 	//a condition to avoid null
 	if (leftList->tail != NULL) {

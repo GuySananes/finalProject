@@ -10,8 +10,8 @@
 //defines
 #define _CRT_SECURE_NO_WARNINGS
 #define BOARD_SIZE 8
-#define WHITE_SQUARE 'X'
-#define EMPTY_SQUARE 'E'
+#define WHITE_SQUARE '_'
+#define EMPTY_SQUARE '*'
 #define PLAYER_1 'T'
 #define PLAYER_2 'B'
 #define LEFT 0
@@ -92,10 +92,20 @@ Sint findMoveType(Board board, checkersPos* pos, Sint dir);
 void addNextCaptureNode(Board board, SingleSourceMovesTreeNode* src, Sint player, Sint captures, Sint dir);
 
 //Q2
-SingleSourceMovesList* FindSingleSouarceOptimalMove(SingleSourceMovesTree* moves_tree);
-SingleSourceMovesList* FindSingleSouarceOptimalMoveHelper(SingleSourceMovesTreeNode* src);
+SingleSourceMovesList* FindSingleSourceOptimalMove(SingleSourceMovesTree* moves_tree);
+SingleSourceMovesList* FindSingleSourceOptimalMoveHelper(SingleSourceMovesTreeNode* src);
 
 //Q3
+multipleSourceMovesList* FindAllPossibleMoves(Board board, Player player);
+bool isTreeEmptyOrOneNode(SingleSourceMovesTree* Tree);
+void FindAllPossibleMovesHelper(int row, int col, Board board, multipleSourceMovesList* multplmoveslst);
+multipleSourceMovesList* makeEmptyMSMList();
+void insertDataToEndMSMList(SingleSourceMovesList* curList, multipleSourceMovesList* multplmoveslst);
+multipleSourceMovesListCell* createMSMListCell(SingleSourceMovesList* curList, multipleSourceMovesListCell* next);
+void insertCellToEndMSMList(multipleSourceMovesListCell* NewCell, multipleSourceMovesList* multplmoveslst);
+
+
+
 
 
 //Q4

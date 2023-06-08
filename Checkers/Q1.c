@@ -14,19 +14,19 @@ SingleSourceMovesTree* FindSingleSourceMoves(Board board, checkersPos* src) {
 	SingleSourceMovesTree* ssmTree = makeEmptyTree();
 
 	//if the square is empty - return NULL
-	if (board[src->col][src->row] == EMPTY_SQUARE)
+	if (board[src->row][src->col] == EMPTY_SQUARE)
 		return NULL;
 
 	//create a new Tree Node
 	ssmTree->source = createSSMTreeNode(board, src, NO_CAPTURES, NULL, NULL);
 
-	//build a right sub ssmTree
-	Sint rightMoveType = findMoveType(board, ssmTree->source->pos, RIGHT);
-	buildssmSubTree(board, ssmTree->source, rightMoveType, RIGHT);
-
 	//build a Left sub ssmTree
 	Sint leftMoveType = findMoveType(board, ssmTree->source->pos, LEFT);
 	buildssmSubTree(board, ssmTree->source, leftMoveType, LEFT);
+
+	//build a right sub ssmTree
+	Sint rightMoveType = findMoveType(board, ssmTree->source->pos, RIGHT);
+	buildssmSubTree(board, ssmTree->source, rightMoveType, RIGHT);
 
 	return ssmTree;
 }
@@ -64,7 +64,7 @@ void FindSingleSourceMovesHelper(Board board, SingleSourceMovesTreeNode* src, Si
 void buildssmSubTree(Board board, SingleSourceMovesTreeNode* src, Sint nextMoveType, Sint dir) {
 
 	Sint dirIndex = dir; //define diraction index in nextMove array
-	Sint player = WHICH_PLAYER(board[src->pos->col][src->pos->row]); //define the player
+	Sint player = WHICH_PLAYER(board[src->pos->row][src->pos->col]); //define the player
 	checkersPos* nextPos;
 
 	//allocate memory for possition
@@ -78,8 +78,8 @@ void buildssmSubTree(Board board, SingleSourceMovesTreeNode* src, Sint nextMoveT
 	//build the sub tree by the move type
 	if (nextMoveType == STEP) {
 		//define the next possition 
-		nextPos->col = src->pos->col + player;
-		nextPos->row = src->pos->row + dir * player;
+		nextPos->col = src->pos->col + dir * player;
+		nextPos->row = src->pos->row + player;
 		//define the right node to be the next step right
 		src->nextMoves[dirIndex] = createSSMTreeNode(board, nextPos, NO_CAPTURES, NULL, NULL);
 	}
@@ -101,25 +101,25 @@ void buildssmSubTree(Board board, SingleSourceMovesTreeNode* src, Sint nextMoveT
 Sint findMoveType(Board board, checkersPos* pos, Sint dir) {
 
 	//define the player as calulation value. 1 -> player 1, -1 -> player 2
-	Sint player = WHICH_PLAYER(board[pos->col][pos->row]);
+	Sint player = WHICH_PLAYER(board[pos->row][pos->col]);
 	//set diraction for calculate square, right -> (-1), left -> 1
 	dir = SET_DIR(dir);
 
 	//check if next step is in board
-	if (pos->col + player >= BOARD_SIZE || pos->row + player * dir >= BOARD_SIZE || pos->col + player < 0 || pos->row + player * dir < 0) {
+	if (pos->col + player * dir >= BOARD_SIZE || pos->row + player >= BOARD_SIZE || pos->col + player * dir < 0 || pos->row + player < 0) {
 		return NO_MOVES;
 	}
 	//check if next step is available
-	else if (board[pos->col + player][pos->row + player * dir] == EMPTY_SQUARE) {
+	else if (board[pos->row + player][pos->col + player * dir] == EMPTY_SQUARE) {
 		return STEP;
 	}
 	//check if next capture is in board
-	else if (pos->col + CAPTURE * player >= BOARD_SIZE || pos->row + CAPTURE * player * dir >= BOARD_SIZE || pos->col + CAPTURE * player < 0 || pos->row + CAPTURE * player * dir < 0) {
+	else if (pos->col + CAPTURE * player * dir >= BOARD_SIZE || pos->row + CAPTURE * player >= BOARD_SIZE || pos->col + CAPTURE * player * dir < 0 || pos->row + CAPTURE * player < 0) {
 		return NO_MOVES;
 	}
 	//if there is opponent in the next pos -> check if the square is empty
-	else if (WHICH_PLAYER(board[pos->col + player][pos->row + player * dir]) != player) {
-		if (board[pos->col + CAPTURE * player][pos->row + CAPTURE * player * dir] == EMPTY_SQUARE) {
+	else if (WHICH_PLAYER(board[pos->row + player][pos->col + player * dir]) != player) {
+		if (board[pos->row + CAPTURE * player][pos->col + CAPTURE * player * dir] == EMPTY_SQUARE) {
 			return CAPTURE;
 		}
 	}
@@ -149,13 +149,13 @@ void addNextCaptureNode(Board board, SingleSourceMovesTreeNode* src, Sint player
 	captures++;
 
 	//define the next possition
-	nextPos->col = src->pos->col + CAPTURE * player;
-	nextPos->row = src->pos->row + CAPTURE * dir * player;
+	nextPos->col = src->pos->col + CAPTURE * dir * player;
+	nextPos->row = src->pos->row + CAPTURE * player;
 
 	//remove oponent from board
-	board[src->pos->col][src->pos->row] = EMPTY_SQUARE;
-	board[src->pos->col + player][src->pos->row + dir * player] = EMPTY_SQUARE;
-	board[nextPos->col][nextPos->row] = PLAYER_TO_CHAR(player);
+	board[src->pos->row][src->pos->col] = EMPTY_SQUARE;
+	board[src->pos->row + player][src->pos->col + dir * player] = EMPTY_SQUARE;
+	board[nextPos->row][nextPos->col] = PLAYER_TO_CHAR(player);
 
 	//define the next move
 	SingleSourceMovesTreeNode* subTreeSource = createSSMTreeNode(board, nextPos, captures, NULL, NULL);

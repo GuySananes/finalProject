@@ -38,16 +38,12 @@ void printBoard(Board board) {
 	Sint i, j;
 	for (i = 0; i < BOARD_SIZE; i++) {
 		for (j = 0; j < BOARD_SIZE; j++) {
-			printf("%c ", board[i][j]);
+			printf("%c   ", board[i][j]);
 		}
-		printf("\n");
+		printf("\n\n");
 	}
 	printf("\n");
 }
-
-//Q3
-/************************************************************************************************/
-
 
 //etc
 
