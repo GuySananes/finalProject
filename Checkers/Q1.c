@@ -40,6 +40,7 @@ void FindSingleSourceMovesHelper(Board board, SingleSourceMovesTreeNode* src, Si
 
 	//find left and right possition
 	Sint leftPos = findMoveType(board, src->pos, LEFT);
+	
 	Sint rightPos = findMoveType(board, src->pos, RIGHT);
 	Sint captures = src->total_captures_so_far;
 
@@ -52,7 +53,7 @@ void FindSingleSourceMovesHelper(Board board, SingleSourceMovesTreeNode* src, Si
 		addNextCaptureNode(board, src, player, captures, RIGHT);
 		FindSingleSourceMovesHelper(board, src->nextMoves[RIGHT], player);
 	}
-	printBoard(board);
+	
 	return;
 }
 
@@ -64,7 +65,7 @@ void FindSingleSourceMovesHelper(Board board, SingleSourceMovesTreeNode* src, Si
 void buildssmSubTree(Board board, SingleSourceMovesTreeNode* src, Sint nextMoveType, Sint dir) {
 
 	Sint dirIndex = dir; //define diraction index in nextMove array
-	Sint player = WHICH_PLAYER(board[src->pos->row][src->pos->col]); //define the player
+	Sint playerSign = WHICH_PLAYER(board[src->pos->row][src->pos->col]); //define the player
 	checkersPos* nextPos;
 
 	//allocate memory for possition
@@ -78,14 +79,14 @@ void buildssmSubTree(Board board, SingleSourceMovesTreeNode* src, Sint nextMoveT
 	//build the sub tree by the move type
 	if (nextMoveType == STEP) {
 		//define the next possition 
-		nextPos->col = src->pos->col + dir * player;
-		nextPos->row = src->pos->row + player;
+		nextPos->col = src->pos->col + dir * playerSign;
+		nextPos->row = src->pos->row + playerSign;
 		//define the right node to be the next step right
 		src->nextMoves[dirIndex] = createSSMTreeNode(board, nextPos, NO_CAPTURES, NULL, NULL);
 	}
 	else if (nextMoveType == CAPTURE) {
-		addNextCaptureNode(board, src, player, NO_CAPTURES, dirIndex);
-		FindSingleSourceMovesHelper(board, src->nextMoves[dirIndex], player);
+		addNextCaptureNode(board, src, playerSign, NO_CAPTURES, dirIndex);
+		FindSingleSourceMovesHelper(board, src->nextMoves[dirIndex], playerSign);
 	}
 	else {
 		src->nextMoves[dirIndex] = NULL;
@@ -109,6 +110,7 @@ Sint findMoveType(Board board, checkersPos* pos, Sint dir) {
 	if (pos->col + player * dir >= BOARD_SIZE || pos->row + player >= BOARD_SIZE || pos->col + player * dir < 0 || pos->row + player < 0) {
 		return NO_MOVES;
 	}
+	
 	//check if next step is available
 	else if (board[pos->row + player][pos->col + player * dir] == EMPTY_SQUARE) {
 		return STEP;
@@ -152,13 +154,9 @@ void addNextCaptureNode(Board board, SingleSourceMovesTreeNode* src, Sint player
 	nextPos->col = src->pos->col + CAPTURE * dir * player;
 	nextPos->row = src->pos->row + CAPTURE * player;
 
-	//remove oponent from board
-	board[src->pos->row][src->pos->col] = EMPTY_SQUARE;
-	board[src->pos->row + player][src->pos->col + dir * player] = EMPTY_SQUARE;
-	board[nextPos->row][nextPos->col] = PLAYER_TO_CHAR(player);
-
 	//define the next move
 	SingleSourceMovesTreeNode* subTreeSource = createSSMTreeNode(board, nextPos, captures, NULL, NULL);
+	
 	src->nextMoves[dirIndex] = subTreeSource;
 
 }

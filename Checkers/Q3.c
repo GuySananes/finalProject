@@ -3,6 +3,13 @@
 //Q3
 /************************************************************************************************/
 
+
+/************************
+* Input: board and player
+* Output: multiple source moves list
+* Function operation: goes through each position on the board and checks
+* if it is the current players pos. sends the position of all player's spots to the helper,
+************************/
 multipleSourceMovesList* FindAllPossibleMoves(Board board, Player player) {
 
 	multipleSourceMovesList* multplmoveslst = makeEmptyMSMList();
@@ -18,6 +25,12 @@ multipleSourceMovesList* FindAllPossibleMoves(Board board, Player player) {
 	return multplmoveslst;
 }
 
+/************************
+* Input: row and col of a spot that contains the current player
+* Output: void
+* Function operation: if the current player can move from this spot, it adds the path to the list.
+* the path is the single source moves list. which is becoming (sort of) a node in the multiple moves list.
+************************/
 void FindAllPossibleMovesHelper(int row, int col, Board board, multipleSourceMovesList* multplmoveslst) {
 
 	checkersPos* curPos;
@@ -38,12 +51,13 @@ void FindAllPossibleMovesHelper(int row, int col, Board board, multipleSourceMov
 	}
 
 }
-
+//checks if the tree is empty or only has one node,
+//if it is empty or one node only,there are no moves from this position.
 bool isTreeEmptyOrOneNode(SingleSourceMovesTree* Tree) {
 	return (Tree == NULL || (Tree->source->nextMoves[0] == NULL && Tree->source->nextMoves[1] == NULL));
 }
 
-
+//lists functions to insert new cells to the multiple source moves list...
 multipleSourceMovesList* makeEmptyMSMList() {
 	multipleSourceMovesList* multplmoveslst;
 
@@ -57,6 +71,8 @@ multipleSourceMovesList* makeEmptyMSMList() {
 
 }
 
+
+//MSM = multiple source moves list
 void insertDataToEndMSMList(SingleSourceMovesList* curList, multipleSourceMovesList* multplmoveslst) {
 
 	multipleSourceMovesListCell* NewCell;

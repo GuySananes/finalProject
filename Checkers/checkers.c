@@ -6,41 +6,36 @@
 
 void initGame(Board board) {
 
-	Sint i, j; //i - row index, j - col index
-
-	for (i = 0; i < BOARD_SIZE; i++) {
-		for (j = 0; j < BOARD_SIZE; j++) {
-			if (i < D) {
-				if (IS_GRAY_SQUARE(i, j))
-					board[i][j] = PLAYER_1;
-				else
-					board[i][j] = WHITE_SQUARE;
-			}				
-			else if (i > E) {
-				if (IS_GRAY_SQUARE(i, j))
-					board[i][j] = PLAYER_2;
-				else
-					board[i][j] = WHITE_SQUARE;
-			}
-			else{
-				if (IS_GRAY_SQUARE(i, j))
-					board[i][j] = EMPTY_SQUARE;
-				else
-					board[i][j] = WHITE_SQUARE;
-			}
-		}
-	}
+	initGameHelper(A, D, PLAYER_1, board);
+	initGameHelper(D, F, EMPTY_SQUARE, board);
+	initGameHelper(F, BOARD_SIZE, PLAYER_2, board);
 
 }
 
+void initGameHelper(int start, int end, char tool, Board board) {
+	int i, j;
+	for (i = start; i < end; i++) {
+		for (j = 0; j < BOARD_SIZE; j++) {
+			if (IS_GRAY_SQUARE(i, j))
+				board[i][j] = tool;
+			else
+				board[i][j] = WHITE_SQUARE;
+		}
+	}
+}
 
 void printBoard(Board board) {
 	Sint i, j;
+	PRINT_LINE;
+	PRINT_NUMBERS;
+	PRINT_LINE;
 	for (i = 0; i < BOARD_SIZE; i++) {
+		printf("|%c", i + 'A');
 		for (j = 0; j < BOARD_SIZE; j++) {
-			printf("%c   ", board[i][j]);
+			printf("|%c", board[i][j]);
 		}
-		printf("\n\n");
+		printf("|\n");
+		PRINT_LINE;
 	}
 	printf("\n");
 }

@@ -10,8 +10,8 @@
 //defines
 #define _CRT_SECURE_NO_WARNINGS
 #define BOARD_SIZE 8
-#define WHITE_SQUARE '_'
-#define EMPTY_SQUARE '*'
+#define WHITE_SQUARE ' '
+#define EMPTY_SQUARE ' '
 #define PLAYER_1 'T'
 #define PLAYER_2 'B'
 #define LEFT 0
@@ -32,6 +32,9 @@ enum ROWS_LETTER{ A, B, C, D, E, F, G, H };
 #define PLAYER_TO_CHAR(P) ((P == 1) ? PLAYER_1 : PLAYER_2)
 #define CHECK_ALLOCATION(p) if(p == NULL) {printf("Memorey allocation failed!\n"); exit(1);}
 #define SWITCH_PLAYERS(player) ((player == PLAYER_1) ? PLAYER_2 : PLAYER_1)
+#define GET_AVG_POS(a,b) ((a + b) / 2)
+#define PRINT_LINE puts("+-+-+-+-+-+-+-+-+-+")
+#define PRINT_NUMBERS puts("+ |1|2|3|4|5|6|7|8|")
 
 //typdefs
 typedef unsigned char Board[BOARD_SIZE][BOARD_SIZE];
@@ -82,6 +85,7 @@ typedef struct _multipleSourceMovesList {
 //general game functions
 
 void initGame(Board board);
+void initGameHelper(int start, int end, char tool, Board board);
 void printBoard(Board board);
 
 //Q1
@@ -104,11 +108,10 @@ void insertDataToEndMSMList(SingleSourceMovesList* curList, multipleSourceMovesL
 multipleSourceMovesListCell* createMSMListCell(SingleSourceMovesList* curList, multipleSourceMovesListCell* next);
 void insertCellToEndMSMList(multipleSourceMovesListCell* NewCell, multipleSourceMovesList* multplmoveslst);
 
-
-
-
-
 //Q4
+void Turn(Board board, Player player);
+SingleSourceMovesList* getOptimalMove(Board board, Player player, multipleSourceMovesList* multipleMovesLst);
+void updateBoard(Board board, Player player, SingleSourceMovesList* moves_list);  
 
 
 //Q5

@@ -18,18 +18,10 @@ void PlayGame(Board board, Player starting_player) {
 void gamePlayLoop(Board board, Player player) {
 
 	while (!isGameOver(board, player)) {
-		printf("%c's turn:\n", player);
-
+		
 		//play the optimal move for the player
-		//Turn(board, player);
+		Turn(board, player);
 
-		//prints his last move
-		//printmove();
-
-		//prints the board after playing the turn
-		printBoard(board);
-
-		//		
 		player = SWITCH_PLAYERS(player);
 	}
 }

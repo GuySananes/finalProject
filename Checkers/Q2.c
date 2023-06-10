@@ -3,6 +3,8 @@
 //Q2
 /************************************************************************************************/
 
+#define BLOCKED -1
+
 /************************
 * Input: moves Tree of a square
 * Output: optimal moves list
@@ -23,7 +25,7 @@ SingleSourceMovesList* FindSingleSourceOptimalMove(SingleSourceMovesTree* moves_
 SingleSourceMovesList* FindSingleSourceOptimalMoveHelper(SingleSourceMovesTreeNode* src) {
 
 	SingleSourceMovesList* leftList, * rightList;
-	Sint capturesRight = 0, capturesLeft = 0;
+	Sint capturesRight = BLOCKED, capturesLeft = BLOCKED;
 
 	//break condition - end of the tree -> return empty list
 	if (src == NULL) {
