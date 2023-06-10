@@ -11,20 +11,27 @@
 * the function prints the updated board the move that was played and by which player.
 ************************/
 void Turn(Board board, Player player) {
-
+	//create Optimal moves lists for player
 	multipleSourceMovesList* multipleMovesLst = FindAllPossibleMoves(board, player);
 	SingleSourceMovesList* optimal_move_lst = NULL;
 
 	if (multipleMovesLst == NULL)
 		return;
 	
+	//choose the optimal move from the list
 	optimal_move_lst = getOptimalMove(board, player, multipleMovesLst);
 
+	//apply the move on the board and print the current board
 	updateBoard(board, player, optimal_move_lst);
 	printf("%c's turn:\n", player);
 	printf("%c%c->%c%c\n", (optimal_move_lst->head->position->row + 'A'), (optimal_move_lst->head->position->col + '1'),
 		(optimal_move_lst->tail->position->row + 'A'), (optimal_move_lst->tail->position->col + '1'));
 	printBoard(board);
+
+	if (player == PLAYER_1)
+		COUNT_MOVES_1++;
+	else
+		COUNT_MOVES_2++;
 }
 
 /************************
@@ -47,18 +54,22 @@ SingleSourceMovesList* getOptimalMove(Board board, Player player, multipleSource
 
 	while (cur_cell != NULL) {
 
+		//update the optimal cell if there is more captures in the current cell
 		if (cur_cell->single_source_moves_list->tail->captures > max_captures) {
 
 			max_captures = cur_cell->single_source_moves_list->tail->captures;
 			max_cell = cur_cell;
 		}
 
+		//update the optimal cell by his position
 		else if (cur_cell->single_source_moves_list->tail->captures == max_captures) {
 
+			//check the row coordinate
 			if ((player_sign * cur_cell->single_source_moves_list->head->position->row) > player_sign * (max_cell->single_source_moves_list->head->position->row)) {
 				max_cell = cur_cell;
 			}
 
+			//check the col coordinate
 			if ((player_sign * cur_cell->single_source_moves_list->head->position->row) == player_sign * (max_cell->single_source_moves_list->head->position->row)) {
 
 				if ((player_sign * cur_cell->single_source_moves_list->head->position->col) > player_sign * (max_cell->single_source_moves_list->head->position->col)) {
@@ -68,6 +79,11 @@ SingleSourceMovesList* getOptimalMove(Board board, Player player, multipleSource
 		}
 		cur_cell = cur_cell->next;
 	}
+
+	if ((player == PLAYER_1) && (COUNT_CAP_1 < max_captures))
+		COUNT_CAP_1 = (unsigned char)max_captures;
+	if((player == PLAYER_2) && (COUNT_CAP_2 < max_captures))
+		COUNT_CAP_2 = (unsigned char)max_captures;
 
 	if (max_cell != NULL)
 		return max_cell->single_source_moves_list;
@@ -87,14 +103,14 @@ void updateBoard(Board board, Player player, SingleSourceMovesList* moves_list) 
 	unsigned short int num_of_cap = moves_list->tail->captures;
 	unsigned short int erase_opponent_row = 0, erase_opponent_col = 0;
 
-
+	//update in case of step
 	if (num_of_cap == NO_CAPTURES) {
 
 		board[moves_list->head->position->row][moves_list->head->position->col] = EMPTY_SQUARE;
 		board[moves_list->tail->position->row][moves_list->tail->position->col] = player;
 	}
 
-		
+	//update in case of capture
 	else {
 
 		board[cur_cell->position->row][cur_cell->position->col] = EMPTY_SQUARE;

@@ -36,6 +36,9 @@ void FindAllPossibleMovesHelper(int row, int col, Board board, multipleSourceMov
 	checkersPos* curPos;
 	SingleSourceMovesTree* curTree;
 	SingleSourceMovesList* curList;
+	Board tmpBoard;
+
+	copyBoard(tmpBoard, board);
 
 	curPos = (checkersPos*)malloc(sizeof(checkersPos));
 	CHECK_ALLOCATION(curPos);
@@ -49,15 +52,18 @@ void FindAllPossibleMovesHelper(int row, int col, Board board, multipleSourceMov
 		curList = FindSingleSourceOptimalMove(curTree);
 		insertDataToEndMSMList(curList, multplmoveslst);
 	}
+	copyBoard(board, tmpBoard);
 
 }
+
 //checks if the tree is empty or only has one node,
 //if it is empty or one node only,there are no moves from this position.
 bool isTreeEmptyOrOneNode(SingleSourceMovesTree* Tree) {
 	return (Tree == NULL || (Tree->source->nextMoves[0] == NULL && Tree->source->nextMoves[1] == NULL));
 }
 
-//lists functions to insert new cells to the multiple source moves list...
+//multipleSourceMoves lists functions
+
 multipleSourceMovesList* makeEmptyMSMList() {
 	multipleSourceMovesList* multplmoveslst;
 

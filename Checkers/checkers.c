@@ -22,6 +22,9 @@ void initGameHelper(int start, int end, char tool, Board board) {
 				board[i][j] = WHITE_SQUARE;
 		}
 	}
+	//initialize statistics
+	COUNT_CAP_1 = COUNT_CAP_2 = NO_CAPTURES;
+	COUNT_MOVES_1 = COUNT_MOVES_2 = NO_MOVES;
 }
 
 void printBoard(Board board) {
@@ -32,7 +35,11 @@ void printBoard(Board board) {
 	for (i = 0; i < BOARD_SIZE; i++) {
 		printf("|%c", i + 'A');
 		for (j = 0; j < BOARD_SIZE; j++) {
-			printf("|%c", board[i][j]);
+			if (isDataSquare(i, j)) 
+				printf("|%c", EMPTY_SQUARE);
+			
+			else
+				printf("|%c", board[i][j]);
 		}
 		printf("|\n");
 		PRINT_LINE;

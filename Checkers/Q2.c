@@ -11,8 +11,10 @@
 * Function operation: create the list using helper function
 ************************/
 SingleSourceMovesList* FindSingleSourceOptimalMove(SingleSourceMovesTree* moves_tree) {
+	
 	//TODO!!!!!!!!!!! add validation for tree pointer
 	return FindSingleSourceOptimalMoveHelper(moves_tree->source);
+	
 
 }
 

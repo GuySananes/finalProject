@@ -105,7 +105,7 @@ Sint findMoveType(Board board, checkersPos* pos, Sint dir) {
 	Sint player = WHICH_PLAYER(board[pos->row][pos->col]);
 	//set diraction for calculate square, right -> (-1), left -> 1
 	dir = SET_DIR(dir);
-
+	
 	//check if next step is in board
 	if (pos->col + player * dir >= BOARD_SIZE || pos->row + player >= BOARD_SIZE || pos->col + player * dir < 0 || pos->row + player < 0) {
 		return NO_MOVES;
@@ -153,6 +153,12 @@ void addNextCaptureNode(Board board, SingleSourceMovesTreeNode* src, Sint player
 	//define the next possition
 	nextPos->col = src->pos->col + CAPTURE * dir * player;
 	nextPos->row = src->pos->row + CAPTURE * player;
+
+	//remove oponent from board
+	board[src->pos->row][src->pos->col] = EMPTY_SQUARE;
+	board[src->pos->row + player][src->pos->col + dir * player] = EMPTY_SQUARE;
+	board[nextPos->row][nextPos->col] = PLAYER_TO_CHAR(player);
+
 
 	//define the next move
 	SingleSourceMovesTreeNode* subTreeSource = createSSMTreeNode(board, nextPos, captures, NULL, NULL);

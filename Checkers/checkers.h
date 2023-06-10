@@ -21,6 +21,10 @@
 #define CAPTURE 2
 #define NO_MOVES 0
 #define NO_CAPTURES 0
+#define COUNT_CAP_1 board[0][0]
+#define COUNT_CAP_2 board[0][6]
+#define COUNT_MOVES_1 board[0][2]
+#define COUNT_MOVES_2 board[0][4]
 
 //emun
 enum ROWS_LETTER{ A, B, C, D, E, F, G, H };
@@ -35,6 +39,7 @@ enum ROWS_LETTER{ A, B, C, D, E, F, G, H };
 #define GET_AVG_POS(a,b) ((a + b) / 2)
 #define PRINT_LINE puts("+-+-+-+-+-+-+-+-+-+")
 #define PRINT_NUMBERS puts("+ |1|2|3|4|5|6|7|8|")
+#define isDataSquare(i,j) (((i == 0) && ((j == 0) || (j == 2) || (j == 4) || (j == 6))) ? true : false  )
 
 //typdefs
 typedef unsigned char Board[BOARD_SIZE][BOARD_SIZE];
@@ -103,10 +108,7 @@ SingleSourceMovesList* FindSingleSourceOptimalMoveHelper(SingleSourceMovesTreeNo
 multipleSourceMovesList* FindAllPossibleMoves(Board board, Player player);
 bool isTreeEmptyOrOneNode(SingleSourceMovesTree* Tree);
 void FindAllPossibleMovesHelper(int row, int col, Board board, multipleSourceMovesList* multplmoveslst);
-multipleSourceMovesList* makeEmptyMSMList();
-void insertDataToEndMSMList(SingleSourceMovesList* curList, multipleSourceMovesList* multplmoveslst);
-multipleSourceMovesListCell* createMSMListCell(SingleSourceMovesList* curList, multipleSourceMovesListCell* next);
-void insertCellToEndMSMList(multipleSourceMovesListCell* NewCell, multipleSourceMovesList* multplmoveslst);
+
 
 //Q4
 void Turn(Board board, Player player);
@@ -118,6 +120,8 @@ void updateBoard(Board board, Player player, SingleSourceMovesList* moves_list);
 void PlayGame(Board board, Player starting_player);
 void gamePlayLoop(Board board, Player player);
 bool isGameOver(Board board, Player player);
+void printStat(Board board, Player player);
+
 
 //Trees function
 SingleSourceMovesTree* makeEmptyTree();
@@ -130,6 +134,12 @@ SingleSourceMovesList* makeEmptySSMList();
 SingleSourceMovesListCell* createSSMListCell(checkersPos* pos, unsigned short capturs, SingleSourceMovesListCell* next);
 void insertTreeNodeToStartList(SingleSourceMovesTreeNode* TNode, SingleSourceMovesList* list);
 void freeList(SingleSourceMovesList* list);
+
+//multipleSourceMoves lists functions
+multipleSourceMovesList* makeEmptyMSMList();
+void insertDataToEndMSMList(SingleSourceMovesList* curList, multipleSourceMovesList* multplmoveslst);
+multipleSourceMovesListCell* createMSMListCell(SingleSourceMovesList* curList, multipleSourceMovesListCell* next);
+void insertCellToEndMSMList(multipleSourceMovesListCell* NewCell, multipleSourceMovesList* multplmoveslst);
 
 //general functions
 void copyBoard(Board dest, Board source);

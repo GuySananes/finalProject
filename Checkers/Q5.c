@@ -12,7 +12,6 @@
 void PlayGame(Board board, Player starting_player) {
 	printBoard(board);
 	gamePlayLoop(board, starting_player);
-	//printStat();
 }
 
 void gamePlayLoop(Board board, Player player) {
@@ -24,6 +23,9 @@ void gamePlayLoop(Board board, Player player) {
 
 		player = SWITCH_PLAYERS(player);
 	}
+	player = SWITCH_PLAYERS(player);
+	printStat(board, player);
+
 }
 
 bool isGameOver(Board board, Player player) {
@@ -52,5 +54,20 @@ bool isGameOver(Board board, Player player) {
 	}
 
 	return (!count);
+}
 
+void printStat(Board board, Player player) {
+
+	printf("%c wins!\n", player);
+
+	if (player == PLAYER_1)
+		printf("%c performed %d moves.\n", player, COUNT_MOVES_1);
+	else 
+		printf("%c performed %d moves.\n", player, COUNT_MOVES_2);
+	
+	if (COUNT_CAP_1 > COUNT_CAP_2)
+		printf("%c performed the highest number of captures in a single move - %d\n", PLAYER_1, COUNT_CAP_1);
+	else
+		printf("%c performed the highest number of captures in a single move - %d\n", PLAYER_2, COUNT_CAP_2);
+		
 }
