@@ -41,7 +41,7 @@ bool isGameOver(Board board, Player player) {
 	}
 
 	if (player == PLAYER_1) {
-		for (j = 2; j < BOARD_SIZE; j += 2) {
+		for (j = 1; j < BOARD_SIZE; j += 2) {
 			if (board[A][j] == PLAYER_2)
 				return true;
 		}
